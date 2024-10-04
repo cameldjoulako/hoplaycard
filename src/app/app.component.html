@@ -3,11 +3,31 @@
   <app-playing-card [my-monster]="monster1"></app-playing-card>
 </div>
  -->
-<app-search-bar
+<!-- <app-search-bar
   (searchButtonClicked)="increaseCount()"
   [search]="search"
   (searchChange)="search = $event"
 />
 
 Search : {{ search }} <br /><br />
-Click count : {{ count }}
+Click count : {{ count }} -->
+
+<!-- <button (click)="toggleMonster()">Toggle Monster</button> -->
+<app-search-bar [(search)]="search"></app-search-bar>
+<div id="card-list">
+  <app-playing-card
+    *ngFor="let monster of filteredMonsters()"
+    [monster]="monster"
+  />
+</div>
+
+<div
+  *ngIf="filteredMonsters().length == 0; then notFound; else found"
+  class="center"
+></div>
+<ng-template #notFound>
+  <div class="center">No monsters found!</div>
+</ng-template>
+<ng-template #found>
+  <div class="center">Found {{ filteredMonsters().length }} monsters !</div>
+</ng-template>
