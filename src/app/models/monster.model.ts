@@ -10,4 +10,8 @@ export class Monster {
   attackName: string = 'Geo Impact';
   attackStrength: number = 60;
   attackDescription: string = 'This is long text description';
+
+  copy(): Monster {
+    return Object.assign(new Monster(), this);
+  }
 }
