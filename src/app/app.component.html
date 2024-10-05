@@ -13,17 +13,6 @@ Search : {{ search }} <br /><br />
 Click count : {{ count }} -->
 
 <!-- <button (click)="toggleMonster()">Toggle Monster</button> -->
-<app-search-bar [(search)]="search"></app-search-bar>
-<div id="card-list">
-  <!-- <app-playing-card
-    *ngFor="let monster of filteredMonsters()"
-    [monster]="monster"
-  /> -->
-  @for (monster of filteredMonsters(); track monster) {
-  <app-playing-card [monster]="monster" /> } @empty {
-  <div class="center">No monsters found!</div>
-  }
-</div>
 
 <!-- <div
   *ngIf="filteredMonsters().length == 0; then notFound; else found"
@@ -36,8 +25,4 @@ Click count : {{ count }} -->
   <div class="center">Found {{ filteredMonsters().length }} monsters !</div>
 </ng-template>
  -->
-
-<!-- Nouvcelle syntaxe if -->
-@if (filteredMonsters().length > 0) {
-<div class="center">Found {{ filteredMonsters().length }} monsters !</div>
-}
+<router-outlet></router-outlet>
