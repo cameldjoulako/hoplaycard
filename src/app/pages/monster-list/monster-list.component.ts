@@ -2,7 +2,7 @@ import { Component, computed, inject, model, signal } from '@angular/core';
 import { Monster } from '../../models/monster.model';
 import { MonsterService } from '../../services/monster/monster.service';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { PlayingCardComponent } from '../../components/playing-card/playing-card.component';
 import { SearchBarComponent } from '../../components/search-bar/search-bar.component';
 
@@ -19,7 +19,8 @@ import { SearchBarComponent } from '../../components/search-bar/search-bar.compo
   styleUrl: './monster-list.component.css',
 })
 export class MonsterListComponent {
-  monsterService = inject(MonsterService);
+  private router = inject(Router);
+  private monsterService = inject(MonsterService);
 
   title = 'Hoplaycard';
 
@@ -52,8 +53,13 @@ export class MonsterListComponent {
   }
 
   addMonster() {
-    const genericMonster = new Monster();
+    /*  const genericMonster = new Monster();
     this.monsterService.add(genericMonster);
-    this.monsters.set(this.monsterService.getAll());
+    this.monsters.set(this.monsterService.getAll()); */
+    this.router.navigate(['monster']);
+  }
+
+  openMonster(monster: Monster) {
+    this.router.navigate(['monster', monster.id]);
   }
 }

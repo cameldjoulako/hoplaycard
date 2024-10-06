@@ -9,11 +9,14 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MonsterType } from '../../utils/monster.utils';
+import { PlayingCardComponent } from '../../components/playing-card/playing-card.component';
+import { Monster } from '../../models/monster.model';
+import { MonsterService } from '../../services/monster/monster.service';
 
 @Component({
   selector: 'app-monster',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, PlayingCardComponent],
   templateUrl: './monster.component.html',
   styleUrl: './monster.component.css',
 })
@@ -22,6 +25,8 @@ export class MonsterComponent implements OnInit, OnDestroy {
   private router = inject(Router);
 
   private formBuilder = inject(FormBuilder);
+
+  private monsterService = inject(MonsterService);
 
   //gestion des erreurs avec formcontrol
   /* name = new FormControl('', [Validators.required]);
@@ -69,28 +74,60 @@ export class MonsterComponent implements OnInit, OnDestroy {
   routeSubscription: Subscription | null = null;
 
   monsterTypes = Object.values(MonsterType);
-  monsterId = signal<number | undefined>(undefined);
+  /* monsterId = signal<number | undefined>(undefined); */
+  monsterId = -1;
+
+  private formValuesSubscription: Subscription | null = null;
+
+  monster: Monster = Object.assign(new Monster(), this.formGroup.value);
 
   ngOnInit(): void {
     /* const params = this.route.snapshot.params; */
     this.routeSubscription = this.route.params.subscribe((params) => {
-      this.monsterId.set(params['id'] ? parseInt(params['id']) : undefined);
+      /* this.monsterId.set(
+        params['monster'] ? parseInt(params['monster']) : undefined
+      ); */
+
+      if (params['monster']) {
+        this.monsterId = parseInt(params['monster']);
+        const monsterFound = this.monsterService.get(this.monsterId);
+
+        if (monsterFound) {
+          this.monster = monsterFound;
+          this.formGroup.patchValue(this.monster);
+        }
+      }
     });
+
+    this.formValuesSubscription = this.formGroup.valueChanges.subscribe(
+      (data) => {
+        this.monster = Object.assign(new Monster(), data);
+      }
+    );
   }
 
-  next() {
+  /* next() {
     let nextId = this.monsterId() || 0;
     nextId++;
     this.router.navigate(['/monster/' + nextId]);
-  }
+  } */
 
   ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe();
+    this.formValuesSubscription?.unsubscribe();
   }
 
   submit(event: Event) {
     event.preventDefault();
-    console.log(this.formGroup.value);
+
+    if (this.monsterId === -1) {
+      this.monsterService.add(this.monster);
+    } else {
+      this.monster.id = this.monsterId;
+      this.monsterService.update(this.monster);
+    }
+
+    this.navigateBack();
   }
 
   /*  setChanged() {
@@ -114,5 +151,9 @@ export class MonsterComponent implements OnInit, OnDestroy {
         });
       };
     }
+  }
+
+  navigateBack() {
+    this.router.navigate(['/home']);
   }
 }
