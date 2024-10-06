@@ -14,13 +14,15 @@
 }
 
 form {
-  max-width: 300px;
+  max-width: 500px;
+  margin: 20px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
 }
 
-.form-field {
-  display: flex;
-  flex-direction: column;
-  margin: 10px 0;
+mat-form-field {
+  width: 100%;
 }
 
 label {
@@ -38,12 +40,23 @@ label {
   color: red;
 }
 
-.button-container {
+.form-field {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  margin-bottom: 20px;
 }
 
-.button-container {
+/* .button-container {
   display: flex;
   gap: 10px;
+} */
+
+.button-container.left,
+.button-container.right {
+  display: inline-block;
+  width: 50%;
+}
+
+.button-container.right {
+  text-align: right !important;
 }
