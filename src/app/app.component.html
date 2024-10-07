@@ -25,4 +25,16 @@ Click count : {{ count }} -->
   <div class="center">Found {{ filteredMonsters().length }} monsters !</div>
 </ng-template>
  -->
+@if(loginService.user()) {
+<mat-toolbar>
+  <button mat-icon-button (click)="navigateHome()">
+    <mat-icon>home</mat-icon>
+  </button>
+  <p>
+    Welcome {{ loginService.user()?.firstName }}
+    {{ loginService.user()?.lastName }}
+  </p>
+  <button mat-flat-button color="warn" (click)="logout()">Logout</button>
+</mat-toolbar>
+}
 <router-outlet></router-outlet>
